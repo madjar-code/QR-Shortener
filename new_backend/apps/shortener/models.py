@@ -1,6 +1,7 @@
 from config import settings
 from django.db import models
 from apps.common.models import TimeStampedModel
+from files.models import Session
 
 
 class Link(TimeStampedModel):
@@ -26,6 +27,12 @@ class Link(TimeStampedModel):
 
     status = models.CharField(verbose_name='Статус ссылки', default=STATUS_DIRTY,
                                choices=STATUS_CHOICES, max_length=255)
+
+    session = models.ForeignKey(to=Session,
+                                null=True,
+                                blank=False,
+                                related_name='own_links',
+                                on_delete=models.CASCADE)
     # user = models.ForeignKey(User, models.CASCADE)
     
     class Meta:

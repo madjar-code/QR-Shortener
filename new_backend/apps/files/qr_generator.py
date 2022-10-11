@@ -3,20 +3,21 @@ from django.core.files import File as f
 from config import settings
 from apps.common.exceptions import InvalidFormat
 from shortener.models import Link
-from .models import File
+from .models import Session
 
 
 class QRGenerator():
     def __init__(self,
+                 session: Session,
                  basename='image',
                  directory_path='all_images',
                  file_formats=['png', 'pdf', ]) -> None:
         if 'all_images' not in os.listdir(settings.BASE_DIR):
             os.mkdir(settings.BASE_DIR / 'all_images')
-
         self.basename = basename
         self.directory_path = directory_path
         self.file_formats = file_formats
+        self.session = session
 
     def generate_all_QR_codes(self) -> None:
         """
@@ -25,7 +26,9 @@ class QRGenerator():
         """
         while True:
             try:
-                un_qr_coded_link = Link.objects.filter(status=Link.STATUS_SHORTER).order_by('?').first()
+                un_qr_coded_link = Link.objects.filter(
+                    session=self.session,
+                    status=Link.STATUS_SHORTER).order_by('?').first()
                 un_qr_coded_link.status = Link.STATUS_DURING
                 un_qr_coded_link.save()
                 link = un_qr_coded_link
@@ -36,7 +39,8 @@ class QRGenerator():
                 for format in self.file_formats:
                     self.generate_image(name=name,
                                         format=format,
-                                        qr_code=qr_code)
+                                        qr_code=qr_code,
+                                        link=link)
             except:
                 break
 
@@ -56,6 +60,7 @@ class QRGenerator():
 
     def generate_image(self, name: str,
                        qr_code: qrcode.QRCode,
+                       link: Link,
                        format='pdf') -> None:
         image = qr_code.make_image(fill_color='black',
                                    back_color='white')
@@ -63,6 +68,8 @@ class QRGenerator():
             filename = (name + f'.{format}')
             path = self.directory_path + f'/{filename}'
             image.save(path, format)
+            link.status = Link.STATUS_READY
+            link.save()
         else:
             raise InvalidFormat(format)
 
@@ -77,7 +84,7 @@ class QRGenerator():
 
     def save_archive(self, path_to_archive):
         file = f(open(path_to_archive, 'rb'))
-        ao = File.objects.last()
+        ao = self.session
         ao.zip_file.save('FILES.zip', file)
         return ao.get_zip_file_url()
 

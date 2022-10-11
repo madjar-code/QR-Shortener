@@ -3,7 +3,7 @@ from rest_framework.serializers import ModelSerializer
 from ..models import Link
 
 
-class ShortenerSerializer(ModelSerializer):
+class LinkSerializer(ModelSerializer):
     class Meta:
         model = Link
-        fields = '__all__'
+        fields = ('long_url', 'short_url', 'status', 'session')

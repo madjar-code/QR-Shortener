@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from files.models import File
+from files.models import Session
 
 
-class FileSerializer(serializers.ModelSerializer):
+class SessionSerializer(serializers.ModelSerializer):
     class Meta():
-        model = File
-        fields = ('input_excel_file', )
+        model = Session
+        fields = '__all__'
