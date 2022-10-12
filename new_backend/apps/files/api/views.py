@@ -1,4 +1,5 @@
 from django.db.models import Q
+from asgiref.sync import sync_to_async
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from shortener.shortener import Shortener
@@ -10,6 +11,14 @@ from files.qr_generator import QRGenerator
 from .serializers import SessionSerializer
 
 
+@api_view(['GET'])
+def all_sessions(request):
+    sessions = Session.objects.all()
+    sessions_serializer = SessionSerializer(sessions, many=True)
+    return Response(sessions_serializer.data)
+
+
+@sync_to_async
 @api_view(['POST'])
 def shorten_links_from_excel(request):
     if not request.data['input_file']:
@@ -108,7 +117,7 @@ def getting_shortened_links_by_session_id(request):
             return Response({'error': 'incorrect session id'})
         links = Link.objects.filter(session=session_instance)
         links_serializer = LinkSerializer(links, many=True)
-        return Response({'shortened_links': links_serializer.data})
+        return Response(links_serializer.data)
     return Response({'error': 'no session id'})
 
 

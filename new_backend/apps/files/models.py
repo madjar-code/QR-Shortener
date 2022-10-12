@@ -11,10 +11,10 @@ class Session(models.Model):
     output_file = models.FileField(upload_to='output', blank=True, null=True)
 
     def get_zip_file_url(self):
-        return f"{settings.DOWNLOAD_PREFIX}zip_files/"
+        return f"{settings.DOWNLOAD_PREFIX}{self.zip_file}"
 
     def get_output_file_url(self):
-        return f"{settings.DOWNLOAD_PREFIX}output/"
+        return f"{settings.DOWNLOAD_PREFIX}{self.output_file}"
 
     def __str__(self):
         return f'Сессия {self.id}'

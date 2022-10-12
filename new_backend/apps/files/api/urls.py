@@ -1,5 +1,7 @@
 from django.urls import path
+
 from .views import *
+
 
 urlpatterns = [
     path('start-shortening/', shorten_links_from_excel, name='start-shortening'),
@@ -8,6 +10,8 @@ urlpatterns = [
     path('excel/', getting_excel_by_session_id, name='excel'),
     path('shortened-links/', getting_shortened_links_by_session_id, name='shortened-links'),
     path('clear/', delete_all_records, name='delete'),
-    
+
+    path('all-sessions/', all_sessions, name='all-sessions'),
+
     # path('make-an-archive/', make_an_archive, name='make-an-archive'),
 ]
