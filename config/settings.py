@@ -11,7 +11,7 @@ SECRET_KEY = "django-insecure-fywq@8zx(ljxhif8al6j2aw^%6c9z*qkt!5&ln5_yn2#0gib0z
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 INSTALLED_APPS = [
@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_yasg',
     'rest_framework',
+    'corsheaders',
 
     'apps.common.apps.CommonConfig',
     'apps.files.apps.FilesConfig',
@@ -92,3 +93,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
 DOWNLOAD_PREFIX = '127.0.0.1:8000/media/'
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = False
+CORS_ORIGIN_ALLOW_ALL = True

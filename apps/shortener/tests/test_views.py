@@ -49,4 +49,3 @@ class getShortUrlTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.data['short url'][:14] == 'https://liy.ru')
         self.assertTrue(isinstance(response.data['session id'], UUID))
-        

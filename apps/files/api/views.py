@@ -8,14 +8,28 @@ from shortener.api.serializers import LinkSerializer
 from files.models import Session
 from files.excel_handler import ExcelHandler
 from files.qr_generator import QRGenerator
-from .serializers import SessionSerializer
+from .serializers import SessionSerializer, SimpleSessionSerializer
 
 
 @api_view(['GET'])
-def all_sessions(request):
+def all_sessions():
     sessions = Session.objects.all()
-    sessions_serializer = SessionSerializer(sessions, many=True)
+    sessions_serializer =\
+        SimpleSessionSerializer(sessions, many=True)
     return Response(sessions_serializer.data)
+
+
+@api_view(['POST'])
+def session(request):
+    session_id = request.data['session_id']
+    if session_id:
+        try:
+            session_instance = Session.objects.get(id=session_id)
+        except Exception:
+            return Response({'error': 'incorrect session id'})
+        session_serializer = SessionSerializer(session_instance)
+        return Response(session_serializer.data)
+    return Response({'error': 'no session id'})
 
 
 @sync_to_async
@@ -126,3 +140,16 @@ def delete_all_records(request):
     Link.objects.all().delete()
     Session.objects.all().delete()
     return Response({'message': 'Successful removal'})
+
+
+@api_view(['DELETE'])
+def delete_session(request):
+    session_id = request.data['session_id']
+    if session_id:
+        try:
+            session_instance = Session.objects.get(id=session_id)
+        except Exception:
+            return Response({'error': 'incorrect session id'})
+        session_instance.delete()
+        return Response({'message': 'success'})
+    return Response({'error': 'no session id'})

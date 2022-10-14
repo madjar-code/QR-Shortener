@@ -17,7 +17,6 @@ def create_short_url(request):
     )
     Shortener().shorten_one_link(link)
     short_url = link.get_short_url()
-    link.delete()
     return Response({
         'short url': short_url,
         'session id': session.id})

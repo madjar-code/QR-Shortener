@@ -34,7 +34,7 @@ class CreateExcelTest(TestCase):
         }
         self.valid_payload = {
             'input_file':
-            'all_images/REPORT.xlsx'
+            './all_images/REPORT.xlsx'
         }
     
     def test_start_invalid_shortening(self):
@@ -46,9 +46,10 @@ class CreateExcelTest(TestCase):
         invalid_message = {'error': 'Incorrect data'}
         self.assertEqual(response.data, invalid_message)
 
-    # def test_start_valid_shortening(self):
-    #     response = client.post(
-    #         reverse('start-shortening'),
-    #         data = json.dumps(self.valid_payload),
-    #         content_type='application/json'
-    #     )
+    def test_start_valid_shortening(self):
+        response = client.post(
+            reverse('start-shortening'),
+            data = json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        pass
