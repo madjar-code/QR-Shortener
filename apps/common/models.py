@@ -1,3 +1,4 @@
+from enum import unique
 import uuid
 from django.db import models
 from django.utils.translation import gettext as _
@@ -30,7 +31,10 @@ class UUIDModel(models.Model):
     """
     Абстр. модель с уникальным ID
     """
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        unique=True)
 
     class Meta:
         abstract = True

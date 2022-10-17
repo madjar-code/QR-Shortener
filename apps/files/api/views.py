@@ -12,7 +12,7 @@ from .serializers import SessionSerializer, SimpleSessionSerializer
 
 
 @api_view(['GET'])
-def all_sessions():
+def all_sessions(request):
     sessions = Session.objects.all()
     sessions_serializer =\
         SimpleSessionSerializer(sessions, many=True)
@@ -38,6 +38,8 @@ def shorten_links_from_excel(request):
     if not request.data['input_file']:
         return Response({'error': 'no file'})
     session_serializer = SessionSerializer(data=request.data)
+    print(request.data)
+    print(session_serializer.is_valid())
     if session_serializer.is_valid():
         session_serializer.save()
         session_instance = Session.objects.last()

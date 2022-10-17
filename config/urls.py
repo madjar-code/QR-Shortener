@@ -6,12 +6,16 @@ from django.conf.urls.static import static
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
+from apps.shortener.api.routers import shortener_router
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('api/', include('apps.shortener.api.urls')),
     path('api/', include('apps.files.api.urls'))
 ]
+
+urlpatterns += shortener_router.urls
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

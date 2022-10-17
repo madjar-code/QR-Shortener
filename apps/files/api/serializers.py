@@ -21,7 +21,8 @@ class SimpleSessionSerializer(ModelSerializer):
         fields = '__all__'
 
 class SessionSerializer(ModelSerializer):
-    own_links = LinkSerializer(many=True)
+    own_links = LinkSerializer(
+        many=True, required=False)
     class Meta():
         model = Session
         fields = '__all__'
